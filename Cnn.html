@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Malaria Detection</title>
+    <style>
+        .container {
+            text-align: center;
+            margin-top: 50px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            margin-top: 20px;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Malaria Detection System</h1>
+        <form id="uploadForm" enctype="multipart/form-data">
+            <label for="modelSelect">Choose a model:</label>
+            <select id="modelSelect" name="model" required>
+                <option value="mixdsv">MIXDSV.h5</option>
+                <option value="vmi">VMI.h5</option>
+                <option value="sdx">SDX.h5</option>
+                <option value="sv">SV.h5</option>
+                <option value="mi">MI.h5</option>
+                <option value="dx">DX.h5</option>
+                <option value="densent">Densent.h5</option>
+                <option value="simplecnn">Simple_Cnn.h5</option>
+                <option value="xception">Xception.h5</option>
+                <option value="vgg16">VGG16</option>
+                <option value="mobilenet">MobileNet</option>
+                <option value="inception">Inception</option>
+            </select>
+            <br><br>
+            <input type="file" id="fileInput" name="file" accept="image/*" required>
+            <br><br>
+            <button type="button" onclick="submitForm()">Upload and Predict</button>
+        </form>
+        <div id="imageContainer"></div>
+        <p id="result" class="result"></p>
+    </div>
+
+    <script>
+        function submitForm() {
+            var formData = new FormData();
+            var modelName = document.getElementById('modelSelect').value;
+            var fileInput = document.getElementById('fileInput');
+            var file = fileInput.files[0];
+            formData.append('file', file);
+            formData.append('model', modelName);
+
+            fetch('http://127.0.0.1:5004/predict', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.error) {
+                    document.getElementById('result').innerText = 'Error: ' + data.error;
+                } else {
+                    document.getElementById('result').innerText = 'Prediction using ' + modelName + ': ' + data.prediction;
+                    displayImage(file);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('result').innerText = 'An error occurred. Please try again.';
+            });
+        }
+
+        function displayImage(file) {
+            var reader = new FileReader();
+            reader.onload = function(event) {
+                var imageContainer = document.getElementById('imageContainer');
+                imageContainer.innerHTML = '<img src="' + event.target.result + '" alt="Uploaded Image">';
+            }
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>
