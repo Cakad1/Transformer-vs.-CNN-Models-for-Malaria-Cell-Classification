@@ -8,7 +8,7 @@ Email: Cakad1@morgan.edu
 ## Abstract
 This study investigates the performance of Transformer-based models (ViT, DeiT) and Convolutional Neural Networks (CNNs) (Simple CNN, VGG16, Xception, InceptionV3, MobileNetV2, DenseNet121) and Ensemble models for the classification of parasitized and uninfected cells in malaria detection. The models were evaluated using various performance metrics, including accuracy, precision, recall, F1 score, and confusion matrix. Results demonstrate the potential of Transformer models in improving automated malaria screening systems.
 
-Keywords
+## Keywords
 Malaria detection, Transformer models, ViT, DeiT, CNN models, classification, F1 score, confusion matrix.
 
 ## Table of Contents
